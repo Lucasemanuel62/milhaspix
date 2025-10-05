@@ -5,8 +5,8 @@ import axios from 'axios';
 // Configure via VITE_API_BASE_URL nos arquivos .env*
 // Configuração da URL base da API
 const getBaseURL = () => {
-    // Sempre usar URL absoluta da API
-    const baseURL = 'https://api.milhaspix.com';
+    // Usar proxy do Vercel para evitar problemas de CORS
+    const baseURL = '/api';
     console.log('API Base URL configurada:', baseURL);
     return baseURL;
 };
@@ -17,9 +17,6 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     },
 });
 
