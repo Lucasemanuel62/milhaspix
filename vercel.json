@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://sua-api-backend.vercel.app/api/$1"
+      "destination": "https://api.milhaspix.com/$1"
     }
   ]
 }

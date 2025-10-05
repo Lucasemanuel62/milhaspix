@@ -32,7 +32,7 @@ Configuração da API (ambiente de produção):
 - Em dev usamos o proxy do Vite para `/api` (ver `vite.config.ts`).
 - Em produção, defina a variável `VITE_API_BASE_URL` para apontar à API real.
 
-Exemplo `.env.production`:
+Exemplo `.env.production` (veja também `.env.production.example`):
 ```
 VITE_API_BASE_URL=https://api.milhaspix.com
 ```

@@ -7,8 +7,7 @@ import axios from 'axios';
 const getBaseURL = () => {
     // Em produção, usar URL absoluta da API backend
     if (import.meta.env.PROD) {
-        // Substitua pela URL correta do seu backend API
-        return 'https://sua-api-backend.vercel.app/api';
+        return 'https://api.milhaspix.com';
     }
     // Em desenvolvimento, usar proxy do Vite
     return '/api';

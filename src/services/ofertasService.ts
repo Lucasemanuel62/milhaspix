@@ -30,7 +30,7 @@ export const buscarOfertas = async (): Promise<OfertaAPI[]> => {
         const ofertas = data.offers || [];
         return ofertas;
     } catch (error: unknown) {
-        console.error(' Erro ao buscar ofertas:', error);
+        console.error('Erro ao buscar ofertas:', error);
         throw error;
     }
 };
