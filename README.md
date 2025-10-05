@@ -2,10 +2,6 @@
 
 Aplicação React + Vite (TypeScript e Tailwind CSS) que simula o fluxo de criação e listagem de ofertas de milhas aéreas.
 
-## Código no GitHub
-
-O código fonte completo deve ser publicado em um repositório público no GitHub. Inclua este README na raiz do projeto.
-
 ### Como rodar o projeto localmente
 
 Pré‑requisitos:
@@ -29,6 +25,16 @@ Build de produção:
 ```bash
 npm run build
 npm run preview
+```
+
+Configuração da API (ambiente de produção):
+
+- Em dev usamos o proxy do Vite para `/api` (ver `vite.config.ts`).
+- Em produção, defina a variável `VITE_API_BASE_URL` para apontar à API real.
+
+Exemplo `.env.production`:
+```
+VITE_API_BASE_URL=https://api.milhaspix.com
 ```
 
 ### Como criar e publicar o repositório no GitHub
@@ -62,7 +68,6 @@ npm run preview
 
 ### Observações
 
-- Este projeto foi desenvolvido como teste técnico para a vaga de Front‑end Júnior.
 - Caso encontre problemas para rodar, verifique a versão do Node e limpe a pasta `node_modules`:
   ```bash
   rm -rf node_modules package-lock.json

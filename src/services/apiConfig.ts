@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-// Configuração base do axios
+// Em desenvolvimento usamos o proxy do Vite ("/api").
+// Em produção (GitHub Pages, Vercel, etc), precisamos da URL absoluta da API.
+// Configure via VITE_API_BASE_URL nos arquivos .env*
 const api = axios.create({
-    baseURL: '/api',
+    baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
     timeout: 10000, 
     headers: {
         'Content-Type': 'application/json',
