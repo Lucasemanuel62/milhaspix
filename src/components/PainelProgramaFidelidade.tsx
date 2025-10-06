@@ -88,11 +88,11 @@ export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, pro
                 </div>
             </div>
 
-            <div className="lg:hidden">
+            <div className="lg:hidden pb-[116px]">
                 <Instrucoes etapaAtual={etapaAtual} />
             </div>
 
-            <div className="lg:hidden px-4 w-full">
+            <div className="lg:hidden fixed bottom-[72px] left-0 right-0 z-10">
                 <RecebaAte etapaAtual={etapaAtual} valor={24325.23} />
             </div>
 

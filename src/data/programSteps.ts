@@ -3,6 +3,7 @@ export const programSteps = [
         id: 1,
         number: "01.",
         name: "Escolha o programa de fidelidade",
+        nameMobile: "Escolha o programa",
         description: "Programa de fidelidade",
     },
     {
