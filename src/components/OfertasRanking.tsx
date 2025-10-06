@@ -11,11 +11,9 @@ export default function OfertasRanking({ etapaAtual, mileValue = 16.50 }: PropsO
     const [carregando, setCarregando] = useState(false);
     const [erro, setErro] = useState<string | null>(null);
 
-    // Valores mínimos e máximos sugeridos
     const MIN_VALUE = 14.00;
     const MAX_VALUE = 16.56;
 
-    // Função para verificar se o valor está na faixa válida
     const isValidValue = (value: number) => {
         return value >= MIN_VALUE && value <= MAX_VALUE;
     };
@@ -26,7 +24,6 @@ export default function OfertasRanking({ etapaAtual, mileValue = 16.50 }: PropsO
                 setCarregando(true);
                 setErro(null);
 
-                // Verificar se o valor está na faixa válida
                 if (!isValidValue(mileValue)) {
                     setErro('-');
                     setRankingData([]);

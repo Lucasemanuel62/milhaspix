@@ -22,7 +22,6 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
     const [cpfTitular, setCpfTitular] = useState('')
     const [cpfValido, setCpfValido] = useState(true)
     const [mostrarSenha, setMostrarSenha] = useState(false)
-    // Tipos de produtos disponíveis
     const productTypes = [
         'Liminar',
         'Convencional',
@@ -33,7 +32,6 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
         'Parceiro'
     ]
 
-    // Estado dos botões "Quero receber" (mobile etapa 2)
     const receiveOptions = ['Imediato', 'em 2 dias', 'em 7 dias', 'Depois do voo']
     const [selectedReceiveIdx, setSelectedReceiveIdx] = useState<number>(0)
 
@@ -42,19 +40,14 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
     const MIN_VALUE = 14.00
     const MAX_VALUE = 16.56
 
-    // Função para validar se o valor está na faixa sugerida
     const isValidValue = (value: string) => {
         const numericValue = parseCurrencyValue(value)
         return numericValue >= MIN_VALUE && numericValue <= MAX_VALUE
     }
 
-    // Estado para controlar se o valor é válido
     const isValueValid = mileValueFormatted ? isValidValue(mileValueFormatted) : true
-
-    // Estado para controlar se deve mostrar erro (apenas quando há valor digitado e é inválido)
     const shouldShowError = mileValueFormatted && !isValidValue(mileValueFormatted)
 
-    // Função para lidar com mudança do tipo de produto
     const handleProductTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value
         setSelectedProductType(value)
@@ -62,31 +55,25 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
         onTipoProdutoChange?.(value)
     }
 
-    // Função para lidar com mudança do CPF
     const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const maskedValue = applyCpfMask(e.target.value)
         setCpfTitular(maskedValue)
         setValue('cpfTitular', maskedValue)
 
-        // Validar CPF apenas se estiver completo
         if (isCpfCompleto(maskedValue)) {
             const isValid = validarCpf(maskedValue)
             setCpfValido(isValid)
             onCpfValidationChange?.(isValid)
         } else {
-            setCpfValido(true) // Não mostra erro enquanto está digitando
-            onCpfValidationChange?.(true) // Considera válido enquanto está digitando
+            setCpfValido(true)
+            onCpfValidationChange?.(true)
         }
     }
 
-    // Função para simular busca de CPFs disponíveis (normalmente viria da API)
     const fetchCpfsDisponiveis = async () => {
         try {
             setCpfsLoading(true)
-            // Simular delay da API
             await new Promise(resolve => setTimeout(resolve, 1000))
-
-            // Simular diferentes cenários baseados no tipo de produto
             let cpfsCount = 'Ilimitado'
             switch (selectedProductType) {
                 case 'Liminar':
@@ -126,12 +113,10 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
         }
     }
 
-    // Definir valor inicial do tipo de produto
     useEffect(() => {
         setValue('product', selectedProductType)
     }, [selectedProductType, setValue])
 
-    // Buscar CPFs disponíveis quando o componente carregar e quando o tipo de produto mudar
     useEffect(() => {
         fetchCpfsDisponiveis()
     }, [selectedProductType])
@@ -143,14 +128,12 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
         }
     }, [mileValue, onMileValueChange])
 
-    // Efeito para notificar sobre mudanças na validação
     useEffect(() => {
         if (onValidationChange) {
             onValidationChange(isValueValid, mileValueFormatted)
         }
     }, [isValueValid, mileValueFormatted, onValidationChange])
 
-    // Função para lidar com mudanças no input
     const handleMileValueInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const formatted = formatCurrency(e.target.value)
         setMileValueFormatted(formatted)

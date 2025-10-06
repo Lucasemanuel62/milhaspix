@@ -31,17 +31,14 @@ export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, pro
         setMileValueFormatted(formattedValue)
     }
 
-    // Mostrar programa baseado na etapa atual
     const currentProgram = programSteps[etapaAtual - 1] || programSteps[0]
 
-    // Função para buscar a imagem do programa selecionado
     const getImagemPrograma = (programaId?: number) => {
         if (!programaId) return undefined;
         const programa = programs.find(p => p.id === programaId);
         return programa?.img;
     };
 
-    // Função para verificar se é Air Portugal
     const isAirPortugal = (programaId?: number) => {
         if (!programaId) return false;
         const programa = programs.find(p => p.id === programaId);
@@ -77,7 +74,7 @@ export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, pro
                         {(() => {
                             const mileValueForRanking = mileValueFormatted
                                 ? parseCurrencyValue(mileValueFormatted)
-                                : 16.5 // fallback inicial para exibir ranking padrão no mobile
+                                : 16.5
                             return (
                                 <OfertasRanking etapaAtual={etapaAtual} mileValue={mileValueForRanking} />
                             )

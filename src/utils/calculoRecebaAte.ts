@@ -10,7 +10,6 @@ export function calcularRecebaAte(
     tipoProduto: string,
     cpfDisponiveis: number | string
 ): number {
-    // Multiplicadores por tipo de produto
     const multiplicadores = {
         'Liminar': 1000,
         'Convencional': 800,
@@ -21,34 +20,22 @@ export function calcularRecebaAte(
         'Parceiro': 900
     };
 
-    // Quantidade de milhas base por tipo de produto
     const milhasBase = multiplicadores[tipoProduto as keyof typeof multiplicadores] || 1000;
 
-    // Limitar quantidade de CPFs se for um número específico
     let cpfLimit = typeof cpfDisponiveis === 'number' ? cpfDisponiveis : 1;
     if (typeof cpfDisponiveis === 'string') {
         if (cpfDisponiveis.toLowerCase() === 'ilimitado') {
-            cpfLimit = 10; // Máximo de 10 CPFs para cálculos
+            cpfLimit = 10;
         } else {
             cpfLimit = parseInt(cpfDisponiveis) || 1;
         }
     }
 
-    // Calcular valor base
     const valorBase = mileValue * milhasBase;
-
-    // Aplicar multiplicador de CPFs (mais CPFs = mais valor)
-    const multiplicadorCpf = Math.min(cpfLimit * 0.8, 5); // Máximo 5x
-
-    // Calcular valor final
+    const multiplicadorCpf = Math.min(cpfLimit * 0.8, 5);
     const valorFinal = valorBase * multiplicadorCpf;
-
-    // Aplicar variação baseada no valor do milheiro (milheiro mais alto = mais valor)
-    const fatorMilheiro = mileValue / 16.50; // 16.50 é o valor médio
-
+    const fatorMilheiro = mileValue / 16.50;
     const resultado = valorFinal * fatorMilheiro;
-    
-    // Garantir que o resultado seja um número válido
     return isNaN(resultado) || resultado <= 0 ? 0 : resultado;
 }
 
