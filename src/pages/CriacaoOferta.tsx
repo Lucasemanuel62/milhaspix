@@ -28,6 +28,12 @@ export default function CriacaoOferta() {
 
     // Calcular valor do Receba até para desktop
     const calcularValorRecebaAteDesktop = () => {
+        const MIN_VALUE = 14.00
+        const MAX_VALUE = 16.56
+        if (isNaN(mileValue) || mileValue < MIN_VALUE || mileValue > MAX_VALUE) {
+            // Fora do intervalo válido: exibir "-" no componente
+            return NaN as unknown as number
+        }
         return calcularRecebaAte(mileValue, tipoProduto, cpfsDisponiveis)
     }
     return (
