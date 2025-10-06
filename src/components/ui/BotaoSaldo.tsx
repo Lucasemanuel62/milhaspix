@@ -7,8 +7,8 @@ export default function BotaoSaldo() {
     }
 
     return (
-        <button className="border border-primary-01 w-[93px] h-[36px] flex items-center justify-center rounded-full py-1.5 px-4">
-            <p className="text-[#EAEAEA] text-center">
+        <button className="border border-primary-01 min-w-[110px] h-[36px] flex items-center justify-center rounded-full py-1.5 px-4">
+            <p className="text-white text-center text-sm font-medium whitespace-nowrap">
                 {formatCurrency(283.12)}
             </p>
         </button>
