@@ -62,7 +62,7 @@ export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, pro
                     mileValueFormatted={mileValueFormatted}
                     isValueValid={isValueValid}
                 />
-                <div className="flex flex-col w-full h-auto p-4 gap-6 ">
+                <div className="flex flex-col w-full h-auto p-4 gap-3 lg:gap-6 ">
                     <ItemPrograma
                         etapaAtual={etapaAtual}
                         programaSelecionado={programaSelecionado}
