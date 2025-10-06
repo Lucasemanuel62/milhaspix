@@ -36,7 +36,7 @@ export default function CriacaoOferta() {
                 <StepIndicator etapaAtual={etapaAtual} aoMudarEtapa={definirEtapaAtual} />
 
                 {etapaAtual === 4 ? (
-                    <SuccessMessage />
+                    <SuccessMessage onVoltarEtapa1={() => definirEtapaAtual(1)} />
                 ) : (
                     <div>
                         <PainelProgramaFidelidade

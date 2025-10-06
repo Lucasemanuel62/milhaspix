@@ -2,7 +2,11 @@ import { useNavigate } from "react-router-dom"
 import ArrowRightIcon from "./icons/ArrowRightIcon"
 import successIcon from "../assets/successIcon.png"
 
-export default function MensagemSucesso() {
+interface PropsMensagemSucesso {
+    onVoltarEtapa1?: () => void;
+}
+
+export default function MensagemSucesso({ onVoltarEtapa1 }: PropsMensagemSucesso) {
     const navigate = useNavigate()
     return (
         <div className="w-full lg:w-[928px] h-[85vh] lg:h-[443px] lg:justify-center overflow-hidden flex flex-col items-center bg-white rounded-2 shadow-md">
@@ -23,7 +27,7 @@ export default function MensagemSucesso() {
             {/* Botões - fixados ao final no mobile, centralizados no desktop */}
             <div className="w-full lg:w-fit h-[72px] lg:h-auto px-4 lg:px-0 border-t border-[#E2E2E2] lg:border-0 flex flex-row items-center justify-between gap-4">
                 <button
-                    onClick={() => navigate("/")}
+                    onClick={() => onVoltarEtapa1 ? onVoltarEtapa1() : navigate("/")}
                     className="lg:hidden flex items-center justify-center w-fit lg:w-[120px] h-[48px] rounded-[44px] bg-white border border-gray-300 text-gray-700 font-medium text-[16px] py-[10px] px-6 hover:bg-gray-50 transition-colors"
                 >
                     Sair
