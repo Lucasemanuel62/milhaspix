@@ -7,7 +7,7 @@ import SecaoMedia from "./SecaoMedia"
 import OfertasRanking from "./OfertasRanking"
 import CaixadeBotoes from "./CaixadeBotoes"
 import Instrucoes from "./Instrucoes"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { parseCurrencyValue } from "../utils/currencyMask"
 import RecebaAte from "./RecebaAte"
 
@@ -22,6 +22,8 @@ interface PropsPainelProgramaFidelidade {
 export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, programaSelecionado, aoSelecionarPrograma, onMileValueChange }: PropsPainelProgramaFidelidade) {
     const [isValueValid, setIsValueValid] = useState(true)
     const [mileValueFormatted, setMileValueFormatted] = useState('')
+    const [showRecebaAte, setShowRecebaAte] = useState(false)
+    const [lastScrollY, setLastScrollY] = useState(0)
 
     const handleMileValueChange = (value: number) => {
         onMileValueChange?.(value)
@@ -31,6 +33,46 @@ export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, pro
         setIsValueValid(isValid)
         setMileValueFormatted(formattedValue)
     }
+
+    // Detectar quando usuário está próximo ao final da página
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY
+            const windowHeight = window.innerHeight
+            const documentHeight = document.documentElement.scrollHeight
+
+            // Etapa 2: aparecer mais para baixo
+            if (etapaAtual === 2) {
+                if (currentScrollY > lastScrollY && currentScrollY + windowHeight >= documentHeight - 150) {
+                    // Descendo e bem próximo ao final - mostrar
+                    setShowRecebaAte(true)
+                } else if (currentScrollY < lastScrollY) {
+                    // Subindo - esconder
+                    setShowRecebaAte(false)
+                }
+            } else if (etapaAtual === 3) {
+                if (currentScrollY > lastScrollY && currentScrollY + windowHeight >= documentHeight - 400) {
+                    // Descendo e próximo ao final - mostrar
+                    setShowRecebaAte(true)
+                } else if (currentScrollY < lastScrollY) {
+                    // Subindo - esconder
+                    setShowRecebaAte(false)
+                }
+            } else {
+                // Outras etapas - mostrar quando próximo ao final
+                if (currentScrollY + windowHeight >= documentHeight - 400) {
+                    setShowRecebaAte(true)
+                } else {
+                    setShowRecebaAte(false)
+                }
+            }
+
+            setLastScrollY(currentScrollY)
+        }
+
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [etapaAtual, lastScrollY])
 
     // Mostrar programa baseado na etapa atual
     const currentProgram = programSteps[etapaAtual - 1] || programSteps[0]
@@ -88,13 +130,15 @@ export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, pro
                 </div>
             </div>
 
-            <div className="lg:hidden pb-[116px]">
+            <div className="lg:hidden pb-[120px]">
                 <Instrucoes etapaAtual={etapaAtual} />
             </div>
 
-            <div className="lg:hidden fixed bottom-[72px] left-0 right-0 z-10">
-                <RecebaAte etapaAtual={etapaAtual} valor={24325.23} />
-            </div>
+            {showRecebaAte && (
+                <div className="lg:hidden fixed bottom-[72px] left-0 right-0 z-10">
+                    <RecebaAte etapaAtual={etapaAtual} valor={24325.23} />
+                </div>
+            )}
 
             <CaixadeBotoes etapaAtual={etapaAtual} aoMudarEtapa={aoMudarEtapa} />
         </div>
