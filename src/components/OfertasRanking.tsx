@@ -71,10 +71,15 @@ export default function OfertasRanking({ etapaAtual, mileValue = 16.50 }: PropsO
                                 <button
                                     key={index}
                                     type="button"
-                                    className={`inline-flex items-center h-[24px] px-[9px] rounded-[44px] border transition-colors bg-white ${isUser ? 'border-teal-400' : 'border-[#E2E2E2]'}`}
+                                    className={`inline-flex items-center h-[24px] px-[9px] rounded-[44px] border transition-colors ${isUser ? 'bg-teal-100 border-teal-400' : 'bg-white border-[#E2E2E2]'}`}
                                 >
-                                    <span className={`font-dmsans font-medium text-[12px] leading-7 ${isUser ? 'text-green-600' : 'text-primary-02'}`}>{item.position}°</span>
-                                    <span className="ml-1 font-dmsans font-medium text-[12px] leading-7 text-primary-02">
+                                    {isUser && (
+                                        <span className="font-dmsans font-medium text-[12px] leading-7 text-teal-700 mr-1">
+                                            Você
+                                        </span>
+                                    )}
+                                    <span className={`font-dmsans font-medium text-[12px] leading-7 ${isUser ? 'text-teal-700' : 'text-primary-02'}`}>{item.position}°</span>
+                                    <span className={`ml-1 font-dmsans font-medium text-[12px] leading-7 ${isUser ? 'text-teal-700' : 'text-primary-02'}`}>
                                         R$ {item.mile_value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </span>
                                 </button>

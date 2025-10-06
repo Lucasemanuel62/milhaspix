@@ -156,7 +156,7 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
         setValue('valorPorMilhas', formatted)
     }
     return (
-        <div className="w-full h-auto flex gap-3 p-4 ">
+        <div className="w-full h-auto flex gap-3">
             {etapaAtual === 1 ? (
                 <form action="" className="w-full h-full flex flex-col lg:flex-row gap-2">
 
@@ -264,19 +264,19 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
                     </div>
 
                     {/* Layout Mobile - Novo */}
-                    <div className="lg:hidden w-full space-y-6 px-4">
+                    <div className="lg:hidden w-full space-y-6">
                         {/* Seção Quero receber */}
                         <div className="w-full">
                             <h3 className="font-dmsans font-medium text-[16px] leading-[130%] text-[#2E3D50] mb-3">
                                 Quero receber
                             </h3>
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-2 gap-1">
                                 {receiveOptions.map((opcao, index) => (
                                     <button
                                         key={opcao}
                                         type="button"
                                         onClick={() => setSelectedReceiveIdx(index)}
-                                        className={`w-full px-2 py-3 rounded-[56px] border-2 font-medium text-[16px] leading-[28px] text-[#000000] transition-colors ${index === selectedReceiveIdx
+                                        className={`w-full py-3 rounded-[56px] border-2 font-medium text-[16px] leading-[28px] text-[#000000] transition-colors ${index === selectedReceiveIdx
                                             ? 'border-primary-02 bg-white'
                                             : 'border-[#F0F0F0] bg-white'
                                             }`}
@@ -298,7 +298,7 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
                                     type="text"
                                     placeholder="10.000"
                                     defaultValue="10.000"
-                                    className="w-full h-[44px] rounded-lg border border-[#E2E2E2] py-[10px] px-[16px] pr-[40px]"
+                                    className="w-full h-[44px] rounded-lg border border-[#E2E2E2] py-[10px] pl-0 pr-[40px]"
                                     {...register("milhasOfertadas")}
                                 />
                                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -317,13 +317,13 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
                             </label>
                             <div className="relative mb-2">
                                 {/* Prefixo R$ */}
-                                <span className={`absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium ${shouldShowError ? 'text-red-500' : 'text-gray-600'}`}>R$</span>
+                                <span className={`absolute left-2 top-1/2 -translate-y-1/2 text-sm font-medium ${shouldShowError ? 'text-red-500' : 'text-gray-600'}`}>R$</span>
                                 <input
                                     type="text"
                                     placeholder="0,00"
                                     value={mileValueFormatted}
                                     onChange={handleMileValueInput}
-                                    className={`w-full h-[44px] rounded-lg border pl-10 pr-10 py-[10px] ${shouldShowError
+                                    className={`w-full h-[44px] rounded-lg border pl-8 pr-3 py-[10px] ${shouldShowError
                                         ? 'border-red-500 text-red-500'
                                         : 'border-[#E2E2E2] focus:border-primary-02'
                                         }`}
