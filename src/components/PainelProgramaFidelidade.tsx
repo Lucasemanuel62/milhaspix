@@ -88,9 +88,11 @@ export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, pro
                 <Instrucoes etapaAtual={etapaAtual} />
             </div>
 
-            <div className="lg:hidden fixed bottom-[72px] left-0 right-0 z-10">
-                <RecebaAte etapaAtual={etapaAtual} valor={24325.23} />
-            </div>
+            {(isValueValid && mileValueFormatted) && (
+                <div className="lg:hidden fixed bottom-[72px] left-0 right-0 z-10">
+                    <RecebaAte etapaAtual={etapaAtual} valor={24325.23} />
+                </div>
+            )}
 
             <CaixadeBotoes etapaAtual={etapaAtual} aoMudarEtapa={aoMudarEtapa} />
         </div>
