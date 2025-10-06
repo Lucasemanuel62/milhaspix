@@ -2,7 +2,7 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import CriacaoOferta from './pages/CriacaoOferta'
 import ListaOfertas from './pages/ListaOfertas'
-import Cabecalho from './components/Header'
+import Cabecalho from './components/Cabecalho'
 
 function App() {
     return (
