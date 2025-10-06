@@ -4,7 +4,14 @@ interface PropsRecebaAte {
 }
 
 export default function RecebaAte({ valor, etapaAtual = 1 }: PropsRecebaAte) {
+    // Mobile: aparece nas etapas 2 e 3
+    // Desktop: aparece apenas na etapa 2
     if (etapaAtual !== 2 && etapaAtual !== 3) {
+        return null;
+    }
+
+    // Verificar se o valor é válido
+    if (!valor || isNaN(valor) || valor <= 0) {
         return null;
     }
 
@@ -14,7 +21,7 @@ export default function RecebaAte({ valor, etapaAtual = 1 }: PropsRecebaAte) {
     });
 
     return (
-        <div className="relative">
+        <div className={`relative ${etapaAtual === 3 ? 'lg:hidden' : ''}`}>
             {/* Div branca por trás para evitar mistura de conteúdo */}
             <div className="absolute inset-0 bg-white/90 backdrop-blur-sm"></div>
 

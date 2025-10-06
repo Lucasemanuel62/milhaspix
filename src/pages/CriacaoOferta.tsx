@@ -5,14 +5,30 @@ import SuccessMessage from "../components/MensagemSucesso"
 import OfertasRanking from "../components/OfertasRanking"
 import RecebaAte from "../components/RecebaAte"
 import Instrucoes from "../components/Instrucoes"
+import { calcularRecebaAte } from "../utils/calculoRecebaAte"
 
 export default function CriacaoOferta() {
     const [etapaAtual, definirEtapaAtual] = useState(1)
     const [programaSelecionado, setProgramaSelecionado] = useState<number>(1)
     const [mileValue, setMileValue] = useState(16.50)
+    const [tipoProduto, setTipoProduto] = useState('Liminar')
+    const [cpfsDisponiveis, setCpfsDisponiveis] = useState<string>('5')
 
     const handleMileValueChange = (value: number) => {
         setMileValue(value)
+    }
+
+    const handleTipoProdutoChange = (tipo: string) => {
+        setTipoProduto(tipo)
+    }
+
+    const handleCpfsDisponiveisChange = (cpfs: string) => {
+        setCpfsDisponiveis(cpfs)
+    }
+
+    // Calcular valor do Receba até para desktop
+    const calcularValorRecebaAteDesktop = () => {
+        return calcularRecebaAte(mileValue, tipoProduto, cpfsDisponiveis)
     }
     return (
         <main className="w-full h-full flex flex-col lg:pt-[40px] items-center justify-center bg-white">
@@ -29,13 +45,15 @@ export default function CriacaoOferta() {
                             programaSelecionado={programaSelecionado}
                             aoSelecionarPrograma={setProgramaSelecionado}
                             onMileValueChange={handleMileValueChange}
+                            onTipoProdutoChange={handleTipoProdutoChange}
+                            onCpfsDisponiveisChange={handleCpfsDisponiveisChange}
                         />
                     </div>
                 )}
                 <div className="hidden lg:flex flex-col gap-6">
                     <Instrucoes etapaAtual={etapaAtual} />
                     <OfertasRanking etapaAtual={etapaAtual} mileValue={mileValue} />
-                    <RecebaAte etapaAtual={etapaAtual} valor={24325.23} />
+                    <RecebaAte etapaAtual={etapaAtual} valor={calcularValorRecebaAteDesktop()} />
                 </div>
 
             </div>

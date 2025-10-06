@@ -4,11 +4,12 @@ import PreviosButton from "./ui/BotaoAnterior"
 interface PropsCaixadeBotoes {
     etapaAtual: number
     aoMudarEtapa: (etapa: number) => void
+    podeProsseguir?: boolean
 }
 
 const TOTAL_ETAPAS = 4
 
-export default function CaixadeBotoes({ etapaAtual, aoMudarEtapa }: PropsCaixadeBotoes) {
+export default function CaixadeBotoes({ etapaAtual, aoMudarEtapa, podeProsseguir = true }: PropsCaixadeBotoes) {
     // Primeira etapa: apenas avançar
     if (etapaAtual === 1) {
         return (
@@ -19,7 +20,7 @@ export default function CaixadeBotoes({ etapaAtual, aoMudarEtapa }: PropsCaixade
                     <span className="text-primary-02 font-dmsans font-medium text-lg leading-7 mr-1">{etapaAtual}</span>
                     <span className="text-[#2E3D50] font-dmsans font-medium text-lg leading-7">de {TOTAL_ETAPAS}</span>
                 </div>
-                <NextButton onNext={() => aoMudarEtapa(etapaAtual + 1)} />
+                <NextButton onNext={() => podeProsseguir && aoMudarEtapa(etapaAtual + 1)} disabled={!podeProsseguir} />
             </div>
         )
     }
@@ -53,7 +54,7 @@ export default function CaixadeBotoes({ etapaAtual, aoMudarEtapa }: PropsCaixade
                     <span className="text-gray-600 text-sm">Ao prosseguir você concorda com os <a href="#" className="text-primary-02 underline">termos de uso</a></span>
                 </div>
             )}
-            <NextButton onNext={() => aoMudarEtapa(etapaAtual + 1)} />
+            <NextButton onNext={() => podeProsseguir && aoMudarEtapa(etapaAtual + 1)} disabled={!podeProsseguir} />
         </div>
     )
 }

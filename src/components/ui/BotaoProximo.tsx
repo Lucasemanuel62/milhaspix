@@ -1,8 +1,12 @@
-export default function BotaoProximo({ onNext }: { onNext: () => void }) {
+export default function BotaoProximo({ onNext, disabled = false }: { onNext: () => void; disabled?: boolean }) {
     return (
         <button
             onClick={onNext}
-            className="flex items-center w-fit min-w-[142px] h-[40px] rounded-[44px] bg-[#1E90FF] py-[10px] px-6 gap-2"
+            disabled={disabled}
+            className={`flex items-center w-fit min-w-[142px] h-[40px] rounded-[44px] py-[10px] px-6 gap-2 ${disabled
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-[#1E90FF] hover:bg-blue-600'
+                }`}
         >
             <span className="w-[70px] h-[20px] font-dmsans font-medium text-[14px] leading-[20px] text-center text-[#FFFFFF]">
                 Prosseguir

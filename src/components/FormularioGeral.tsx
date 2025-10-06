@@ -1,19 +1,26 @@
 import { useForm } from "react-hook-form"
 import { useState, useEffect } from "react"
 import { formatCurrency, parseCurrencyValue } from "../utils/currencyMask"
+import { applyCpfMask } from "../utils/cpfMask"
+import { validarCpf, isCpfCompleto } from "../utils/validarCpf"
 
 interface PropsFormularioGeral {
     etapaAtual?: number;
     onMileValueChange?: (value: number) => void;
     onValidationChange?: (isValid: boolean, formattedValue: string) => void;
+    onCpfValidationChange?: (isValid: boolean) => void;
+    onTipoProdutoChange?: (tipo: string) => void;
+    onCpfsDisponiveisChange?: (cpfs: string) => void;
 }
 
-export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onValidationChange }: PropsFormularioGeral) {
+export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onValidationChange, onCpfValidationChange, onTipoProdutoChange, onCpfsDisponiveisChange }: PropsFormularioGeral) {
     const { register, setValue, watch } = useForm()
     const [mileValueFormatted, setMileValueFormatted] = useState('')
     const [selectedProductType, setSelectedProductType] = useState('Liminar')
     const [cpfsDisponiveis, setCpfsDisponiveis] = useState<string>('Carregando...')
     const [cpfsLoading, setCpfsLoading] = useState(true)
+    const [cpfTitular, setCpfTitular] = useState('')
+    const [cpfValido, setCpfValido] = useState(true)
     // Tipos de produtos disponíveis
     const productTypes = [
         'Liminar',
@@ -48,6 +55,24 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
         const value = e.target.value
         setSelectedProductType(value)
         setValue('product', value)
+        onTipoProdutoChange?.(value)
+    }
+
+    // Função para lidar com mudança do CPF
+    const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const maskedValue = applyCpfMask(e.target.value)
+        setCpfTitular(maskedValue)
+        setValue('cpfTitular', maskedValue)
+
+        // Validar CPF apenas se estiver completo
+        if (isCpfCompleto(maskedValue)) {
+            const isValid = validarCpf(maskedValue)
+            setCpfValido(isValid)
+            onCpfValidationChange?.(isValid)
+        } else {
+            setCpfValido(true) // Não mostra erro enquanto está digitando
+            onCpfValidationChange?.(true) // Considera válido enquanto está digitando
+        }
     }
 
     // Função para simular busca de CPFs disponíveis (normalmente viria da API)
@@ -87,9 +112,11 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
 
             setCpfsDisponiveis(cpfsCount)
             setValue('cpfs', cpfsCount)
+            onCpfsDisponiveisChange?.(cpfsCount)
         } catch (error) {
             console.error('Erro ao buscar CPFs disponíveis:', error)
             setCpfsDisponiveis('Erro ao carregar')
+            onCpfsDisponiveisChange?.('Erro ao carregar')
         } finally {
             setCpfsLoading(false)
         }
@@ -331,18 +358,32 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
                             <div className="relative">
                                 <input
                                     type="text"
-                                    maxLength={18}
-                                    placeholder="431.140.231-12"
-                                    className="w-full h-[44px] rounded-[44px] border py-[10px] px-[16px] pr-[40px] border-[#E2E2E2]"
-                                    {...register("cpfTitular, ")}
-
+                                    maxLength={14}
+                                    placeholder="000.000.000-00"
+                                    value={cpfTitular}
+                                    onChange={handleCpfChange}
+                                    className={`w-full h-[44px] rounded-[44px] border py-[10px] px-[16px] pr-[40px] ${cpfValido
+                                        ? 'border-[#E2E2E2] focus:border-primary-02'
+                                        : 'border-red-500 focus:border-red-500'
+                                        }`}
                                 />
                                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                    <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
+                                    {cpfValido ? (
+                                        <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                    ) : (
+                                        <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                        </svg>
+                                    )}
                                 </div>
                             </div>
+                            {!cpfValido && cpfTitular.length === 14 && (
+                                <p className="text-red-500 text-sm font-dmsans mt-1">
+                                    CPF inválido. Verifique os dados digitados.
+                                </p>
+                            )}
                         </div>
 
                         <div className="w-full h-auto flex flex-col gap-1">
