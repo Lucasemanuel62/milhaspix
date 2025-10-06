@@ -50,6 +50,9 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
     // Estado para controlar se o valor é válido
     const isValueValid = mileValueFormatted ? isValidValue(mileValueFormatted) : true
 
+    // Estado para controlar se deve mostrar erro (apenas quando há valor digitado e é inválido)
+    const shouldShowError = mileValueFormatted && !isValidValue(mileValueFormatted)
+
     // Função para lidar com mudança do tipo de produto
     const handleProductTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value
@@ -240,14 +243,14 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
                                         placeholder="R$ 0,00"
                                         value={mileValueFormatted}
                                         onChange={handleMileValueInput}
-                                        className={`w-full h-[44px] rounded-[44px] border flex space-between py-[10px] px-[16px] ${mileValueFormatted && !isValueValid
+                                        className={`w-full h-[44px] rounded-[44px] border flex space-between py-[10px] px-[16px] ${shouldShowError
                                             ? 'border-red-500 text-red-500'
-                                            : 'border-[#E2E2E2]'
+                                            : 'border-[#E2E2E2] focus:border-primary-02'
                                             }`}
                                     />
                                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                                         <svg
-                                            className={`w-5 h-5 ${mileValueFormatted && !isValueValid ? 'text-red-500' : 'text-gray-400'}`}
+                                            className={`w-5 h-5 ${shouldShowError ? 'text-red-500' : 'text-gray-400'}`}
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
@@ -314,20 +317,20 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
                             </label>
                             <div className="relative mb-2">
                                 {/* Prefixo R$ */}
-                                <span className={`absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium ${mileValueFormatted && !isValueValid ? 'text-red-500' : 'text-gray-600'}`}>R$</span>
+                                <span className={`absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium ${shouldShowError ? 'text-red-500' : 'text-gray-600'}`}>R$</span>
                                 <input
                                     type="text"
                                     placeholder="0,00"
                                     value={mileValueFormatted}
                                     onChange={handleMileValueInput}
-                                    className={`w-full h-[44px] rounded-lg border pl-10 pr-10 py-[10px] ${mileValueFormatted && !isValueValid
+                                    className={`w-full h-[44px] rounded-lg border pl-10 pr-10 py-[10px] ${shouldShowError
                                         ? 'border-red-500 text-red-500'
-                                        : 'border-[#E2E2E2]'
+                                        : 'border-[#E2E2E2] focus:border-primary-02'
                                         }`}
                                 />
                                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                                     <svg
-                                        className={`w-5 h-5 ${mileValueFormatted && !isValueValid ? 'text-red-500' : 'text-gray-400'}`}
+                                        className={`w-5 h-5 ${shouldShowError ? 'text-red-500' : 'text-gray-400'}`}
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -337,7 +340,7 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
                                 </div>
                             </div>
                             {/* Ajuda de validação */}
-                            {mileValueFormatted && !isValueValid && (
+                            {shouldShowError && (
                                 <p className="mb-2 text-[14px] leading-[32px] text-alert-04 font-medium">
                                     Escolha entre <span className="font-bold">R$ 14,00</span> e <span className="font-bold">R$ 16,56</span>
                                 </p>
