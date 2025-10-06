@@ -11,7 +11,18 @@ interface PropsFormularioGeral {
 export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onValidationChange }: PropsFormularioGeral) {
     const { register, setValue, watch } = useForm()
     const [mileValueFormatted, setMileValueFormatted] = useState('')
-    const [productValue, setProductValue] = useState(0)
+    const [selectedProductType, setSelectedProductType] = useState('Liminar')
+    // Tipos de produtos disponíveis
+    const productTypes = [
+        'Liminar',
+        'Convencional',
+        'Promoção',
+        'Corporativo',
+        'Clube de Milhas',
+        'Cashback',
+        'Parceiro'
+    ]
+
     // Estado dos botões "Quero receber" (mobile etapa 2)
     const receiveOptions = ['Imediato', 'em 2 dias', 'em 7 dias', 'Depois do voo']
     const [selectedReceiveIdx, setSelectedReceiveIdx] = useState<number>(0)
@@ -30,18 +41,17 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
     // Estado para controlar se o valor é válido
     const isValueValid = mileValueFormatted ? isValidValue(mileValueFormatted) : true
 
-    // Funções para aumentar e diminuir o valor do produto
-    const increaseProduct = () => {
-        const newValue = productValue + 1
-        setProductValue(newValue)
-        setValue('product', newValue.toString())
+    // Função para lidar com mudança do tipo de produto
+    const handleProductTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value
+        setSelectedProductType(value)
+        setValue('product', value)
     }
 
-    const decreaseProduct = () => {
-        const newValue = Math.max(0, productValue - 1)
-        setProductValue(newValue)
-        setValue('product', newValue.toString())
-    }
+    // Definir valor inicial do tipo de produto
+    useEffect(() => {
+        setValue('product', selectedProductType)
+    }, [selectedProductType, setValue])
 
     useEffect(() => {
         if (mileValue && onMileValueChange) {
@@ -71,39 +81,28 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
                     <div className="w-full h-auto flex flex-col gap-1">
                         <label htmlFor="product"
                             className="font-dmsans font-medium text-[16px] leading-[130%] text-[#2E3D50]"
-                        >Produto
+                        >Tipo de Produto
                         </label>
                         <div className="relative">
-                            <input
-                                type="text"
-                                placeholder="Liminar"
-                                value={productValue}
-                                onChange={(e) => {
-                                    const value = parseInt(e.target.value) || 0
-                                    setProductValue(value)
-                                    setValue('product', value.toString())
-                                }}
-                                className="w-full h-[44px] rounded-[44px] border flex space-between py-[10px] px-[16px] pr-[40px] border-[#E2E2E2]"
-                            />
-                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex flex-col items-center justify-center gap-0.5">
-                                <button
-                                    type="button"
-                                    onClick={increaseProduct}
-                                    className="w-4 h-4 flex items-center justify-center hover:bg-blue-100 rounded transition-colors"
-                                >
-                                    <svg className="w-3 h-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 15l7-7 7 7" />
-                                    </svg>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={decreaseProduct}
-                                    className="w-4 h-4 flex items-center justify-center hover:bg-blue-100 rounded transition-colors"
-                                >
-                                    <svg className="w-3 h-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </button>
+                            <select
+                                id="product"
+                                value={selectedProductType}
+                                onChange={handleProductTypeChange}
+                                className="w-full h-[44px] rounded-[44px] border py-[10px] px-[16px] pr-[40px] border-[#E2E2E2] bg-white appearance-none cursor-pointer focus:outline-none focus:border-primary-02 text-[#2E3D50] font-dmsans"
+                            >
+                                <option value="" disabled>
+                                    Selecione o tipo de produto
+                                </option>
+                                {productTypes.map((type) => (
+                                    <option key={type} value={type}>
+                                        {type}
+                                    </option>
+                                ))}
+                            </select>
+                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                <svg className="w-4 h-4 text-primary-02" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                </svg>
                             </div>
                         </div>
                     </div>
