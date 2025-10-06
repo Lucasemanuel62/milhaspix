@@ -12,6 +12,8 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
     const { register, setValue, watch } = useForm()
     const [mileValueFormatted, setMileValueFormatted] = useState('')
     const [selectedProductType, setSelectedProductType] = useState('Liminar')
+    const [cpfsDisponiveis, setCpfsDisponiveis] = useState<string>('Carregando...')
+    const [cpfsLoading, setCpfsLoading] = useState(true)
     // Tipos de produtos disponíveis
     const productTypes = [
         'Liminar',
@@ -48,10 +50,60 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
         setValue('product', value)
     }
 
+    // Função para simular busca de CPFs disponíveis (normalmente viria da API)
+    const fetchCpfsDisponiveis = async () => {
+        try {
+            setCpfsLoading(true)
+            // Simular delay da API
+            await new Promise(resolve => setTimeout(resolve, 1000))
+
+            // Simular diferentes cenários baseados no tipo de produto
+            let cpfsCount = 'Ilimitado'
+            switch (selectedProductType) {
+                case 'Liminar':
+                    cpfsCount = '5'
+                    break
+                case 'Convencional':
+                    cpfsCount = '3'
+                    break
+                case 'Promoção':
+                    cpfsCount = '1'
+                    break
+                case 'Corporativo':
+                    cpfsCount = 'Ilimitado'
+                    break
+                case 'Clube de Milhas':
+                    cpfsCount = '2'
+                    break
+                case 'Cashback':
+                    cpfsCount = '0'
+                    break
+                case 'Parceiro':
+                    cpfsCount = 'Ilimitado'
+                    break
+                default:
+                    cpfsCount = 'Ilimitado'
+            }
+
+            setCpfsDisponiveis(cpfsCount)
+            setValue('cpfs', cpfsCount)
+        } catch (error) {
+            console.error('Erro ao buscar CPFs disponíveis:', error)
+            setCpfsDisponiveis('Erro ao carregar')
+        } finally {
+            setCpfsLoading(false)
+        }
+    }
+
     // Definir valor inicial do tipo de produto
     useEffect(() => {
         setValue('product', selectedProductType)
     }, [selectedProductType, setValue])
+
+    // Buscar CPFs disponíveis quando o componente carregar e quando o tipo de produto mudar
+    useEffect(() => {
+        fetchCpfsDisponiveis()
+    }, [selectedProductType])
 
     useEffect(() => {
         if (mileValue && onMileValueChange) {
@@ -112,12 +164,23 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
                             className="font-dmsans font-medium text-[16px] leading-[130%] text-[#2E3D50]">
                             CPF's disponíveis
                         </label>
-                        <input
-                            type="select"
-                            placeholder="Ilimitado"
-                            className="w-full h-[44px] rounded-[44px] border flex space-between py-[10px] px-[16px] border-[#E2E2E2]"
-                            {...register("cpfs")}
-                        />
+                        <div className="relative">
+                            <input
+                                type="text"
+                                value={cpfsDisponiveis}
+                                readOnly
+                                className="w-full h-[44px] rounded-[44px] border py-[10px] px-[16px] pr-[40px] border-[#E2E2E2] bg-gray-50 text-gray-600 cursor-not-allowed"
+                            />
+                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                {cpfsLoading ? (
+                                    <div className="w-4 h-4 border-2 border-primary-02 border-t-transparent rounded-full animate-spin"></div>
+                                ) : (
+                                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                    </svg>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
                 </form>
