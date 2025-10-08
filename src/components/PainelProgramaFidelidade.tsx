@@ -9,21 +9,21 @@ import CaixadeBotoes from "./CaixadeBotoes"
 import Instrucoes from "./Instrucoes"
 import { useState } from "react"
 import { parseCurrencyValue } from "../utils/currencyMask"
-import RecebaAte from "./RecebaAte"
+import CalculadoraRecebimento from "./CalculadoraRecebimento"
 
 interface PropsPainelProgramaFidelidade {
     etapaAtual: number;
     aoMudarEtapa: (etapa: number) => void;
     programaSelecionado?: number;
     aoSelecionarPrograma?: (programaId: number) => void;
-    onMileValueChange?: (value: number) => void;
+    aoAlterarValorMilheiro?: (valor: number) => void;
 }
 
-export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, programaSelecionado, aoSelecionarPrograma, onMileValueChange }: PropsPainelProgramaFidelidade) {
+export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, programaSelecionado, aoSelecionarPrograma, aoAlterarValorMilheiro }: PropsPainelProgramaFidelidade) {
     const [isValueValid, setIsValueValid] = useState(true)
     const [mileValueFormatted, setMileValueFormatted] = useState('')
     const handleMileValueChange = (value: number) => {
-        onMileValueChange?.(value)
+        aoAlterarValorMilheiro?.(value)
     }
 
     const handleValidationChange = (isValid: boolean, formattedValue: string) => {
@@ -66,8 +66,8 @@ export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, pro
                     />
                     <FormularioEtapas
                         etapaAtual={etapaAtual}
-                        onMileValueChange={handleMileValueChange}
-                        onValidationChange={handleValidationChange}
+                        aoAlterarValorMilheiro={handleMileValueChange}
+                        aoAlterarValidacao={handleValidationChange}
                     />
                     {/* Ranking: exibir apenas no mobile aqui para evitar duplicidade no desktop */}
                     <div className="lg:hidden">
@@ -90,7 +90,7 @@ export default function PainelProgramaFidelidade({ etapaAtual, aoMudarEtapa, pro
 
             {(isValueValid && mileValueFormatted) && (
                 <div className="lg:hidden fixed bottom-[72px] left-0 right-0 z-10">
-                    <RecebaAte etapaAtual={etapaAtual} valor={24325.23} />
+                    <CalculadoraRecebimento etapaAtual={etapaAtual} valor={24325.23} />
                 </div>
             )}
 

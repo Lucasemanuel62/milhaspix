@@ -6,14 +6,14 @@ import { validarCpf, isCpfCompleto } from "../utils/validarCpf"
 
 interface PropsFormularioGeral {
     etapaAtual?: number;
-    onMileValueChange?: (value: number) => void;
-    onValidationChange?: (isValid: boolean, formattedValue: string) => void;
-    onCpfValidationChange?: (isValid: boolean) => void;
-    onTipoProdutoChange?: (tipo: string) => void;
-    onCpfsDisponiveisChange?: (cpfs: string) => void;
+    aoAlterarValorMilheiro?: (valor: number) => void;
+    aoAlterarValidacao?: (valido: boolean, valorFormatado: string) => void;
+    aoAlterarValidacaoCpf?: (valido: boolean) => void;
+    aoAlterarTipoProduto?: (tipo: string) => void;
+    aoAlterarCpfsDisponiveis?: (cpfs: string) => void;
 }
 
-export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onValidationChange, onCpfValidationChange, onTipoProdutoChange, onCpfsDisponiveisChange }: PropsFormularioGeral) {
+export default function FormularioGeral({ etapaAtual = 1, aoAlterarValorMilheiro, aoAlterarValidacao, aoAlterarValidacaoCpf, aoAlterarTipoProduto, aoAlterarCpfsDisponiveis }: PropsFormularioGeral) {
     const { register, setValue, watch } = useForm()
     const [mileValueFormatted, setMileValueFormatted] = useState('')
     const [selectedProductType, setSelectedProductType] = useState('Liminar')
@@ -52,7 +52,7 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
         const value = e.target.value
         setSelectedProductType(value)
         setValue('product', value)
-        onTipoProdutoChange?.(value)
+        aoAlterarTipoProduto?.(value)
     }
 
     const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,10 +63,10 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
         if (isCpfCompleto(maskedValue)) {
             const isValid = validarCpf(maskedValue)
             setCpfValido(isValid)
-            onCpfValidationChange?.(isValid)
+            aoAlterarValidacaoCpf?.(isValid)
         } else {
             setCpfValido(true)
-            onCpfValidationChange?.(true)
+            aoAlterarValidacaoCpf?.(true)
         }
     }
 
@@ -103,11 +103,11 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
 
             setCpfsDisponiveis(cpfsCount)
             setValue('cpfs', cpfsCount)
-            onCpfsDisponiveisChange?.(cpfsCount)
+            aoAlterarCpfsDisponiveis?.(cpfsCount)
         } catch (error) {
             console.error('Erro ao buscar CPFs disponíveis:', error)
             setCpfsDisponiveis('Erro ao carregar')
-            onCpfsDisponiveisChange?.('Erro ao carregar')
+            aoAlterarCpfsDisponiveis?.('Erro ao carregar')
         } finally {
             setCpfsLoading(false)
         }
@@ -122,17 +122,17 @@ export default function FormularioGeral({ etapaAtual = 1, onMileValueChange, onV
     }, [selectedProductType])
 
     useEffect(() => {
-        if (mileValue && onMileValueChange) {
+        if (mileValue && aoAlterarValorMilheiro) {
             const numericValue = parseCurrencyValue(mileValue)
-            onMileValueChange(numericValue)
+            aoAlterarValorMilheiro(numericValue)
         }
-    }, [mileValue, onMileValueChange])
+    }, [mileValue, aoAlterarValorMilheiro])
 
     useEffect(() => {
-        if (onValidationChange) {
-            onValidationChange(isValueValid, mileValueFormatted)
+        if (aoAlterarValidacao) {
+            aoAlterarValidacao(isValueValid, mileValueFormatted)
         }
-    }, [isValueValid, mileValueFormatted, onValidationChange])
+    }, [isValueValid, mileValueFormatted, aoAlterarValidacao])
 
     const handleMileValueInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const formatted = formatCurrency(e.target.value)

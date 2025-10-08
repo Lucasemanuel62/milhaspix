@@ -3,7 +3,7 @@ import StepIndicator from "../components/IndicadordeEtapa"
 import PainelProgramaFidelidade from "../components/PainelProgramaFidelidade"
 import SuccessMessage from "../components/MensagemSucesso"
 import OfertasRanking from "../components/OfertasRanking"
-import RecebaAte from "../components/RecebaAte"
+import CalculadoraRecebimento from "../components/CalculadoraRecebimento"
 import Instrucoes from "../components/Instrucoes"
 import { calcularRecebaAte } from "../utils/calculoRecebaAte"
 
@@ -50,16 +50,16 @@ export default function CriacaoOferta() {
                             aoMudarEtapa={definirEtapaAtual}
                             programaSelecionado={programaSelecionado}
                             aoSelecionarPrograma={setProgramaSelecionado}
-                            onMileValueChange={handleMileValueChange}
-                            onTipoProdutoChange={handleTipoProdutoChange}
-                            onCpfsDisponiveisChange={handleCpfsDisponiveisChange}
+                            aoAlterarValorMilheiro={handleMileValueChange}
+                            aoAlterarTipoProduto={handleTipoProdutoChange}
+                            aoAlterarCpfsDisponiveis={handleCpfsDisponiveisChange}
                         />
                     </div>
                 )}
                 <div className="hidden lg:flex flex-col gap-6">
                     <Instrucoes etapaAtual={etapaAtual} />
                     <OfertasRanking etapaAtual={etapaAtual} mileValue={mileValue} />
-                    <RecebaAte etapaAtual={etapaAtual} valor={calcularValorRecebaAteDesktop()} />
+                    <CalculadoraRecebimento etapaAtual={etapaAtual} valor={calcularValorRecebaAteDesktop()} />
                 </div>
 
             </div>

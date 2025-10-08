@@ -1,9 +1,9 @@
-interface PropsRecebaAte {
+interface PropsCalculadoraRecebimento {
     valor: number;
     etapaAtual?: number;
 }
 
-export default function RecebaAte({ valor, etapaAtual = 1 }: PropsRecebaAte) {
+export default function CalculadoraRecebimento({ valor, etapaAtual = 1 }: PropsCalculadoraRecebimento) {
     // Mobile: aparece nas etapas 2 e 3
     // Desktop: aparece apenas na etapa 2
     if (etapaAtual !== 2 && etapaAtual !== 3) {
